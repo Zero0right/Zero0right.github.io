@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Pipeline Detection System</title>
-    {#    以下head为了实现批量上传图片#}
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <script src="static/js/vue.js"></script>
@@ -14,8 +13,6 @@
     <script src="static/js/require.js"></script>
     <script type="text/javascript" src="static\js\echarts.min.js"></script>
     <script src="static\js\jquery-3.5.1.min.js"></script>
-    {#    自定义组件的css#}
-    {#    <link rel="stylesheet" href="../static/css/myindex.css">#}
 </head>
 
 <body>
@@ -24,7 +21,7 @@
         <el-header style="text-align: center; font-size:x-large;border: 1px solid #eee;align-items: center">
             <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
                 <el-menu-item>
-                    <el-link :underline="false" href="{{ url_for("refresh") }}"
+                    <el-link :underline="false" href=""
                              style="font-weight: bold;color: #3a8ee6;font-size: large">Pipeline Detection
                         System
                     </el-link>
@@ -58,7 +55,7 @@
                         <template slot="title"><i class="el-icon-setting"></i>System Settings</template>
                         <el-menu-item-group>
                             <el-menu-item index="1">
-                                <el-link :underline="false" href="{{ url_for("refresh") }}">
+                                <el-link :underline="false" href="">
                                     <i class="el-icon-back"></i>Home Page
                                 </el-link>
                             </el-menu-item>
@@ -68,12 +65,12 @@
                                 </el-link>
                             </el-menu-item>
                             <el-menu-item index="1">
-                                <el-link :underline="false" href="{{ url_for("refresh") }}"><i
+                                <el-link :underline="false" href=""><i
                                         class="el-icon-delete"></i>Clear Cache
                                 </el-link>
                             </el-menu-item>
                             <el-menu-item index="1">
-                                <el-link :underline="false" href="{{ url_for("neo4j_owl") }}"><i
+                                <el-link :underline="false" href=""><i
                                         class="el-icon-orange"></i>Ontology Model
                                 </el-link>
                             </el-menu-item>
@@ -101,97 +98,29 @@
                                 :closable="false">
                         </el-alert>
                         <div style="text-align: center">
-                            {% if upload_files_path %}
-                                {# Original Image或视频 #}
-                                {#视频#}
-                                {% if VIDEO_FLAG %}
-                                    <el-divider>
-                                        <el-tag>Original Video</el-tag>
-                                    </el-divider>
-                                    {% for upload_file_path in upload_files_path %}
-                                        <video width="320" height="240" controls>
-                                            <source src="{{ upload_file_path }}" type="video/mp4">
-                                            <source src="{{ upload_file_path }}" type="video/ogg">
-                                            <source src="{{ upload_file_path }}" type="video/webm">
-                                            <object data="{{ upload_file_path }}" width="320" height="240">
-                                                <embed src="{{ upload_file_path }}" width="320" height="240">
-                                            </object>
-                                        </video>
-                                    {% endfor %}
-                                    <el-divider>
-                                        <el-tag>Key Frame Extraction</el-tag>
-                                    </el-divider>
-                                    <div align="center">
-                                        <img src="static/keyFrames/frameDifferencesAndPeak.jpg" width="350">
-                                    </div>
-                                {% else %}
-                                    {# 图像 #}
-                                    <el-divider>
-                                        <el-tag>Original Image</el-tag>
-                                    </el-divider>
-                                    <table align="center">
-                                        <tr>
-                                            {% for upload_file_path in upload_files_path %}
-                                                <td>
-                                                    <img src="{{ upload_file_path }}" width="200">
-                                                </td>
-                                            {% endfor %}
-                                        </tr>
-                                    </table>
-                                {% endif %}
-                                {# Detection Result #}
-                                <el-divider>
-                                    <el-tag type="success">Detection Result</el-tag>
-                                </el-divider>
-                                <table align="center">
-                                    <tr>
-                                        {% for identify_image in identify_images %}
-                                            <td><a download=""><img src="{{ identify_image }}" alt="" width="200"></a>
-                                                <form action="/get_repairAdvice?i={{ loop.index }}" method="post">
-                                                    <a href="{{ url_for("get_repairAdvice") }}"></a>
-                                                    <el-button icon="el-icon-thumb" id="button_advice"
-                                                               native-type="submit"
-                                                               @click="get_advice">
-                                                        Repair Suggestions
-                                                    </el-button>
-                                                </form>
-                                            </td>
-                                        {% endfor %}
-                                    </tr>
-                                </table>
-                                {# ajax实现修复建议表的局部刷新 #}
-                                <div align="center" id="repair_advice">
-                                </div>
 
-                            {% else %}
-                                {#                        上传图像或者视频#}
                                 <div align="center">
                                     <div style="transform:translateY(30%);width: 400px">
                                         <el-upload
                                                 class="upload-demo"
                                                 drag
-                                                action="{{ url_for("upload") }}"
+                                                action=""
                                                 multiple
                                                 name="file"
                                                 auto-upload>
                                             <i class="el-icon-upload"></i>
                                             <div class="el-upload__text">Drag files here, or<em> click upload</em></div>
-                                            {#                <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>#}
                                         </el-upload>
                                         <br>
-                                        <form action="{{ url_for("detect") }}" method="post">
+                                        <form action="" method="post">
                                             <el-button type="primary" icon="el-icon-caret-right" native-type="submit"
                                                        @click="openFullScreen2">Detect
                                             </el-button>
                                         </form>
                                     </div>
                                 </div>
-                            {% endif %}
                         </div>
                     </el-main>
-                    {# 配置项 drawer #}
-                    {% if upload_files_path %}
-                    {% else %}
                         <el-aside style="float: right;width:400px;height: auto ">
                             <div class="demo-drawer__content" align="left" style="width: 100%;border: 1px solid #eee">
                                 <template>
@@ -199,12 +128,12 @@
                                         <el-tab-pane label="Yolov5" name="first">
                                             <div class="demo-drawer__content">
                                                 <el-form ref="yolov5_form" :model="yolov5_form" label-width="30%"
-                                                         action="{{ url_for("yolov5_configuration") }}"
+                                                         action=""
                                                          method="Post">
                                                     <el-form-item label="Weights">
                                                         <el-upload
                                                                 class="upload-demo"
-                                                                action="{{ url_for("yolov5_configuration") }}"
+                                                                action=""
                                                                 name="yolov5_weights"
                                                                 :on-preview="handlePreview"
                                                                 :on-remove="handleRemove"
@@ -295,7 +224,7 @@
                                         <el-tab-pane label="Faster-RCNN" name="second">
                                             <div class="demo-drawer__content2">
                                                 <el-form ref="frcnn_form" :model="frcnn_form" label-width="30%"
-                                                         action="{{ url_for("faster_rcnn_configuration") }}"
+                                                         action=""
                                                          method="Post">
                                                     <el-form-item label="scores_thres">
                                                         <el-input-number v-model="frcnn_form.scores_thres"
@@ -329,7 +258,7 @@
                                             <div class="demo-drawer__content3">
                                                 <el-form ref="keyframe_form" :model="keyframe_form"
                                                          label-width="30%"
-                                                         action="{{ url_for("keyframe_configuration") }}"
+                                                         action=""
                                                          method="Post">
                                                     <el-form-item label="Min_dist">
                                                         <el-input v-model="keyframe_form.Min_dist"
@@ -361,7 +290,6 @@
                                 </template>
                             </div>
                         </el-aside>
-                    {% endif %}
 
                 </el-container>
                 <el-footer style="border: 1px solid #eee;">
@@ -381,19 +309,18 @@
             custom-class="demo-drawer"
             ref="drawer"
     >
-        {# 配置项 drawer #}
         <div class="demo-drawer__content" align="left" style="width: 90%">
             <template>
                 <el-tabs v-model="activeName" @tab-click="handleClick" type="card">
                     <el-tab-pane label="Yolov5" name="first">
                         <div class="demo-drawer__content">
                             <el-form ref="yolov5_form" :model="yolov5_form" label-width="100px"
-                                     action="{{ url_for("yolov5_configuration") }}"
+                                     action=""
                                      method="Post">
                                 <el-form-item label="Weights">
                                     <el-upload
                                             class="upload-demo"
-                                            action="{{ url_for("yolov5_configuration") }}"
+                                            action=""
                                             name="yolov5_weights"
                                             :on-preview="handlePreview"
                                             :on-remove="handleRemove"
@@ -484,7 +411,7 @@
                     <el-tab-pane label="Faster-RCNN" name="second">
                         <div class="demo-drawer__content2">
                             <el-form ref="frcnn_form" :model="frcnn_form" label-width="100px"
-                                     action="{{ url_for("faster_rcnn_configuration") }}"
+                                     action=""
                                      method="Post">
                                 <el-form-item label="scores_thres">
                                     <el-input-number v-model="frcnn_form.scores_thres"
@@ -518,7 +445,7 @@
                         <div class="demo-drawer__content3">
                             <el-form ref="keyframe_form" :model="keyframe_form"
                                      label-width="100px"
-                                     action="{{ url_for("keyframe_configuration") }}"
+                                     action=""
                                      method="Post">
                                 <el-form-item label="Min_dist">
                                     <el-input v-model="keyframe_form.Min_dist"
@@ -554,7 +481,6 @@
 </body>
 
 <script>
-    {#  #}
     var Main = {
         data() {
             return {
